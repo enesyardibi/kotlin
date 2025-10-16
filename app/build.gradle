@@ -60,7 +60,9 @@ dependencies {
     // Navigation Compose
     implementation 'androidx.navigation:navigation-compose:2.7.5'
     
-    // (Removed) ViewModel Compose - MVI geçişi sonrası gerekli değil
+    // ViewModel for MVVM
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0'
     
     // Icons
     implementation 'androidx.compose.material:material-icons-extended'

@@ -22,9 +22,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.girisekrani.mvi.intent.ForgotPasswordIntent
-import com.example.girisekrani.mvi.store.ForgotPasswordStore
-import com.example.girisekrani.repository.AuthRepository
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.girisekrani.util.isValidPassword
 import com.example.girisekrani.util.isValidPhoneNumber
 
@@ -32,9 +30,8 @@ import com.example.girisekrani.util.isValidPhoneNumber
 @Composable
 fun ForgotPasswordScreen(onPasswordResetSuccess: () -> Unit = {}, onBackToLogin: () -> Unit = {}) {
     val context = LocalContext.current
-    val repository = remember { AuthRepository(context) }
-    val store = remember { ForgotPasswordStore(repository) }
-    val uiState by store.uiState.collectAsState()
+    val vm: ForgotPasswordViewModel = viewModel(factory = ForgotPasswordViewModelFactory(context))
+    val uiState by vm.uiState.collectAsState()
 
     Box(
         modifier = Modifier.fillMaxSize().background(
@@ -107,7 +104,7 @@ fun ForgotPasswordScreen(onPasswordResetSuccess: () -> Unit = {}, onBackToLogin:
                         OutlinedTextField(
                             value = uiState.phoneNumber,
                             onValueChange = { 
-                                store.dispatch(ForgotPasswordIntent.UpdatePhoneNumber(it))
+                                vm.updatePhoneNumber(it)
                             },
                             label = { Text("Telefon Numarası") },
                             placeholder = { Text("5XX XXX XX XX") },
@@ -121,7 +118,7 @@ fun ForgotPasswordScreen(onPasswordResetSuccess: () -> Unit = {}, onBackToLogin:
                         OutlinedTextField(
                             value = uiState.fullName,
                             onValueChange = { 
-                                store.dispatch(ForgotPasswordIntent.UpdateFullName(it))
+                                vm.updateFullName(it)
                             },
                             label = { Text("Ad Soyad") },
                             placeholder = { Text("Kayıt sırasındaki ad soyad") },
@@ -134,7 +131,7 @@ fun ForgotPasswordScreen(onPasswordResetSuccess: () -> Unit = {}, onBackToLogin:
 
                         Button(
                             onClick = {
-                                store.dispatch(ForgotPasswordIntent.VerifyIdentity)
+                                vm.verifyIdentity()
                             },
                             modifier = Modifier.fillMaxWidth().height(56.dp),
                             shape = RoundedCornerShape(12.dp),
@@ -166,14 +163,14 @@ fun ForgotPasswordScreen(onPasswordResetSuccess: () -> Unit = {}, onBackToLogin:
                         OutlinedTextField(
                             value = uiState.newPassword,
                             onValueChange = { 
-                                store.dispatch(ForgotPasswordIntent.UpdateNewPassword(it))
+                                vm.updateNewPassword(it)
                             },
                             label = { Text("Yeni Şifre") },
                             placeholder = { Text("Yeni Şifre") },
                             leadingIcon = { Icon(Icons.Default.Lock, null) },
                             trailingIcon = {
                                 IconButton(onClick = { 
-                                    store.dispatch(ForgotPasswordIntent.TogglePasswordVisibility)
+                                vm.togglePasswordVisibility()
                                 }) {
                                     Icon(if (uiState.passwordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff, null)
                                 }
@@ -196,14 +193,14 @@ fun ForgotPasswordScreen(onPasswordResetSuccess: () -> Unit = {}, onBackToLogin:
                         OutlinedTextField(
                             value = uiState.confirmPassword,
                             onValueChange = { 
-                                store.dispatch(ForgotPasswordIntent.UpdateConfirmPassword(it))
+                                vm.updateConfirmPassword(it)
                             },
                             label = { Text("Yeni Şifre Tekrar") },
                             placeholder = { Text("Yeni Şifre Tekrar") },
                             leadingIcon = { Icon(Icons.Default.Lock, null) },
                             trailingIcon = {
                                 IconButton(onClick = { 
-                                    store.dispatch(ForgotPasswordIntent.ToggleConfirmPasswordVisibility)
+                                vm.toggleConfirmPasswordVisibility()
                                 }) {
                                     Icon(if (uiState.confirmPasswordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff, null)
                                 }
@@ -217,7 +214,7 @@ fun ForgotPasswordScreen(onPasswordResetSuccess: () -> Unit = {}, onBackToLogin:
 
                         Button(
                             onClick = {
-                                store.dispatch(ForgotPasswordIntent.UpdatePassword, onPasswordResetSuccess)
+                                vm.updatePassword(onPasswordResetSuccess)
                             },
                             modifier = Modifier.fillMaxWidth().height(56.dp),
                             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50)),

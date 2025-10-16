@@ -1,35 +1,23 @@
-package com.example.girisekrani.mvi.store
+package com.example.girisekrani
 
-import com.example.girisekrani.mvi.intent.LoginIntent
-import com.example.girisekrani.mvi.state.LoginUiState
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.girisekrani.mvvm.state.LoginUiState
 import com.example.girisekrani.repository.AuthRepository
 import com.example.girisekrani.util.isValidPhoneNumber
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class LoginStore(
-    private val repository: AuthRepository,
-    private val scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
-) {
+class LoginViewModel(
+    private val repository: AuthRepository
+) : ViewModel() {
+
     private val _uiState = MutableStateFlow(LoginUiState())
     val uiState: StateFlow<LoginUiState> = _uiState.asStateFlow()
 
-    fun dispatch(intent: LoginIntent, onLoginSuccess: () -> Unit = {}) {
-        when (intent) {
-            is LoginIntent.UpdatePhoneNumber -> updatePhoneNumber(intent.phoneNumber)
-            is LoginIntent.UpdatePassword -> updatePassword(intent.password)
-            is LoginIntent.TogglePasswordVisibility -> togglePasswordVisibility()
-            is LoginIntent.Login -> login(onLoginSuccess)
-            is LoginIntent.ClearError -> clearError()
-        }
-    }
-
-    private fun updatePhoneNumber(phoneNumber: String) {
+    fun updatePhoneNumber(phoneNumber: String) {
         val formatted = if (phoneNumber.startsWith("+90 ")) phoneNumber else "+90 " + phoneNumber.removePrefix("+90").trim()
         _uiState.value = _uiState.value.copy(
             phoneNumber = formatted,
@@ -38,24 +26,19 @@ class LoginStore(
         )
     }
 
-    private fun updatePassword(password: String) {
-        _uiState.value = _uiState.value.copy(
-            password = password,
-            errorMessage = ""
-        )
+    fun updatePassword(password: String) {
+        _uiState.value = _uiState.value.copy(password = password, errorMessage = "")
     }
 
-    private fun togglePasswordVisibility() {
-        _uiState.value = _uiState.value.copy(
-            passwordVisible = !_uiState.value.passwordVisible
-        )
+    fun togglePasswordVisibility() {
+        _uiState.value = _uiState.value.copy(passwordVisible = !_uiState.value.passwordVisible)
     }
 
-    private fun clearError() {
+    fun clearError() {
         _uiState.value = _uiState.value.copy(errorMessage = "")
     }
 
-    private fun login(onSuccess: () -> Unit) {
+    fun login(onSuccess: () -> Unit) {
         val state = _uiState.value
         if (!isValidPhoneNumber(state.phoneNumber)) {
             _uiState.value = state.copy(errorMessage = "Geçerli telefon numarası girin")
@@ -65,8 +48,7 @@ class LoginStore(
             _uiState.value = state.copy(errorMessage = "Şifre boş olamaz")
             return
         }
-
-        scope.launch {
+        viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = "")
             val success = try {
                 repository.authenticateUser(state.phoneNumber, state.password)
@@ -85,6 +67,5 @@ class LoginStore(
         }
     }
 }
-
 
 

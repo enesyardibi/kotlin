@@ -13,6 +13,14 @@ Bu proje, **Hesapli.com** için geliştirilmiş modern bir Android giriş ekran�
 - Material Design 3 uyumluluğu
 
 ## 🏗️ Mimari ve Teknolojiler
+### 🧩 Mimari: MVVM
+
+- Ekran mantığı `ViewModel` sınıflarında yönetilir.
+- UI durumları `StateFlow` tabanlı `UiState` veri sınıfları ile tutulur (`app/src/main/java/com/example/girisekrani/mvvm/state`).
+- UI, `collectAsState()` ile ViewModel durumunu gözlemler; tek yönlü veri akışı sağlanır.
+- İş kuralları/veri erişimi `repository` katmanındadır (`AuthRepository`).
+- Önceki MVI denemeleri kaldırılmıştır; projenin tamamı MVVM’e geçirilmiştir.
+
 
 ### 📱 Ana Teknolojiler
 
@@ -44,6 +52,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-compose:2.7.5'
     
     // ViewModel
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0'
     
     // Icons
@@ -62,10 +71,24 @@ dependencies {
 ```
 app/src/main/
 ├── java/com/example/girisekrani/
-│   ├── MainActivity.kt           # Ana aktivite
-│   ├── SplashScreen.kt          # Splash ekranı bileşeni
-│   ├── LoginScreen.kt           # Giriş ekranı bileşeni
-│   └── Navigation.kt            # Navigation controller
+│   ├── MainActivity.kt
+│   ├── Navigation.kt
+│   ├── SplashScreen.kt
+│   ├── LoginScreen.kt
+│   ├── RegisterScreen.kt
+│   ├── ForgotPasswordScreen.kt
+│   ├── LoginViewModel.kt
+│   ├── RegisterViewModel.kt
+│   ├── ForgotPasswordViewModel.kt
+│   ├── LoginViewModelFactory.kt
+│   ├── RegisterViewModelFactory.kt
+│   ├── ForgotPasswordViewModelFactory.kt
+│   ├── repository/
+│   │   └── AuthRepository.kt
+│   └── mvvm/state/
+│       ├── LoginUiState.kt
+│       ├── RegisterUiState.kt
+│       └── ForgotPasswordUiState.kt
 ├── res/
 │   ├── drawable/                # Görsel kaynaklar
 │   │   ├── hesapli_logo.png    # Uygulama logosu
@@ -81,7 +104,7 @@ app/src/main/
 │   ├── Shopping Bag.json       # Lottie animasyon dosyası
 │   ├── logo_animation.json     # Özel animasyon
 │   └── shopping_bag_animation.json
-└── AndroidManifest.xml         # Uygulama manifest'i
+└── AndroidManifest.xml
 ```
 
 ## 🎨 UI/UX Tasarım Detayları
@@ -532,6 +555,7 @@ Bu proje Hesapli.com için geliştirilmiştir. Tüm hakları saklıdır.
 ---
 
 *Bu README dosyası, proje hakkında kapsamlı bilgi sağlamak ve sunumlarınızda kullanmanız için hazırlanmıştır.*
+
 
 
 

@@ -1,4 +1,4 @@
-package com.example.girisekrani.mvi.state
+package com.example.girisekrani.mvvm.state
 
 data class RegisterUiState(
     val fullName: String = "",
@@ -10,6 +10,5 @@ data class RegisterUiState(
     val isLoading: Boolean = false,
     val errorMessage: String = ""
 )
-
 
 

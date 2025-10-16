@@ -23,9 +23,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.girisekrani.mvi.intent.RegisterIntent
-import com.example.girisekrani.mvi.store.RegisterStore
-import com.example.girisekrani.repository.AuthRepository
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.girisekrani.util.getPasswordError
 import com.example.girisekrani.util.isValidPassword
 import com.example.girisekrani.util.isValidPhoneNumber
@@ -34,9 +32,8 @@ import com.example.girisekrani.util.isValidPhoneNumber
 @Composable
 fun RegisterScreen(onRegisterSuccess: () -> Unit = {}, onBackToLogin: () -> Unit = {}) {
     val context = LocalContext.current
-    val repository = remember { AuthRepository(context) }
-    val store = remember { RegisterStore(repository) }
-    val uiState by store.uiState.collectAsState()
+    val vm: RegisterViewModel = viewModel(factory = RegisterViewModelFactory(context))
+    val uiState by vm.uiState.collectAsState()
 
     Box(
         modifier = Modifier.fillMaxSize().background(
@@ -74,7 +71,7 @@ fun RegisterScreen(onRegisterSuccess: () -> Unit = {}, onBackToLogin: () -> Unit
                     OutlinedTextField(
                         value = uiState.fullName,
                         onValueChange = { 
-                            store.dispatch(RegisterIntent.UpdateFullName(it))
+                            vm.updateFullName(it)
                         },
                         label = { Text("Ad Soyad") },
                         leadingIcon = { Icon(Icons.Default.Person, null) },
@@ -89,7 +86,7 @@ fun RegisterScreen(onRegisterSuccess: () -> Unit = {}, onBackToLogin: () -> Unit
                     OutlinedTextField(
                         value = uiState.phoneNumber,
                         onValueChange = { 
-                            store.dispatch(RegisterIntent.UpdatePhoneNumber(it))
+                            vm.updatePhoneNumber(it)
                         },
                         label = { Text("Telefon Numarası") },
                         placeholder = { Text("5XX XXX XX XX") },
@@ -106,14 +103,14 @@ fun RegisterScreen(onRegisterSuccess: () -> Unit = {}, onBackToLogin: () -> Unit
                     OutlinedTextField(
                         value = uiState.password,
                         onValueChange = { 
-                            store.dispatch(RegisterIntent.UpdatePassword(it))
+                            vm.updatePassword(it)
                         },
                         label = { Text("Şifre") },
                         placeholder = { Text("En az 6 karakter, büyük/küçük harf") },
                         leadingIcon = { Icon(Icons.Default.Lock, null) },
                         trailingIcon = {
                             IconButton(onClick = { 
-                                store.dispatch(RegisterIntent.TogglePasswordVisibility)
+                                vm.togglePasswordVisibility()
                             }) {
                                 Icon(if (uiState.passwordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff, null)
                             }
@@ -143,13 +140,13 @@ fun RegisterScreen(onRegisterSuccess: () -> Unit = {}, onBackToLogin: () -> Unit
                     OutlinedTextField(
                         value = uiState.confirmPassword,
                         onValueChange = { 
-                            store.dispatch(RegisterIntent.UpdateConfirmPassword(it))
+                            vm.updateConfirmPassword(it)
                         },
                         label = { Text("Şifre Tekrar") },
                         leadingIcon = { Icon(Icons.Default.Lock, null) },
                         trailingIcon = {
                             IconButton(onClick = { 
-                                store.dispatch(RegisterIntent.ToggleConfirmPasswordVisibility)
+                                vm.toggleConfirmPasswordVisibility()
                             }) {
                                 Icon(if (uiState.confirmPasswordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff, null)
                             }
@@ -177,7 +174,7 @@ fun RegisterScreen(onRegisterSuccess: () -> Unit = {}, onBackToLogin: () -> Unit
                     // Kayıt Butonu
                     Button(
                         onClick = {
-                            store.dispatch(RegisterIntent.Register, onRegisterSuccess)
+                            vm.register(onRegisterSuccess)
                         },
                         modifier = Modifier.fillMaxWidth().height(56.dp),
                         enabled = !uiState.isLoading,

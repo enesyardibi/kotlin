@@ -24,9 +24,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.girisekrani.mvi.intent.LoginIntent
-import com.example.girisekrani.mvi.store.LoginStore
-import com.example.girisekrani.repository.AuthRepository
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.girisekrani.util.isValidPhoneNumber
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -37,9 +35,8 @@ fun LoginScreen(
     onForgotPasswordClick: () -> Unit = {}
 ) {
     val context = LocalContext.current
-    val repository = remember { AuthRepository(context) }
-    val store = remember { LoginStore(repository) }
-    val uiState by store.uiState.collectAsState()
+    val vm: LoginViewModel = viewModel(factory = LoginViewModelFactory(context))
+    val uiState by vm.uiState.collectAsState()
 
     Box(
         modifier = Modifier
@@ -94,7 +91,7 @@ fun LoginScreen(
                     OutlinedTextField(
                         value = uiState.phoneNumber,
                         onValueChange = { 
-                            store.dispatch(LoginIntent.UpdatePhoneNumber(it))
+                            vm.updatePhoneNumber(it)
                         },
                         label = { Text("Telefon Numarası") },
                         placeholder = { Text("5XX XXX XX XX") },
@@ -131,7 +128,7 @@ fun LoginScreen(
                     OutlinedTextField(
                         value = uiState.password,
                         onValueChange = { 
-                            store.dispatch(LoginIntent.UpdatePassword(it))
+                            vm.updatePassword(it)
                         },
                         label = { Text("Şifre") },
                         placeholder = { Text("Şifrenizi girin") },
@@ -144,7 +141,7 @@ fun LoginScreen(
                         trailingIcon = {
                             IconButton(
                                 onClick = { 
-                                    store.dispatch(LoginIntent.TogglePasswordVisibility)
+                                    vm.togglePasswordVisibility()
                                 }
                             ) {
                                 Icon(
@@ -199,7 +196,7 @@ fun LoginScreen(
 
                     Button(
                         onClick = {
-                            store.dispatch(LoginIntent.Login, onLoginSuccess)
+                            vm.login(onLoginSuccess)
                         },
                         modifier = Modifier
                             .fillMaxWidth()

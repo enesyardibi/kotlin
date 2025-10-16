@@ -1,4 +1,4 @@
-package com.example.girisekrani.mvi.state
+package com.example.girisekrani.mvvm.state
 
 data class ForgotPasswordUiState(
     val phoneNumber: String = "+90 ",
@@ -12,6 +12,5 @@ data class ForgotPasswordUiState(
     val successMessage: String = "",
     val showNewPasswordFields: Boolean = false
 )
-
 
 

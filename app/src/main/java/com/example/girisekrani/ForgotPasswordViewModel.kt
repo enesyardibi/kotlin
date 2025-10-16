@@ -1,76 +1,60 @@
-package com.example.girisekrani.mvi.store
+package com.example.girisekrani
 
-import com.example.girisekrani.mvi.intent.ForgotPasswordIntent
-import com.example.girisekrani.mvi.state.ForgotPasswordUiState
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.girisekrani.mvvm.state.ForgotPasswordUiState
 import com.example.girisekrani.repository.AuthRepository
 import com.example.girisekrani.util.isValidPassword
 import com.example.girisekrani.util.isValidPhoneNumber
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class ForgotPasswordStore(
-    private val repository: AuthRepository,
-    private val scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
-) {
+class ForgotPasswordViewModel(
+    private val repository: AuthRepository
+) : ViewModel() {
+
     private val _uiState = MutableStateFlow(ForgotPasswordUiState())
     val uiState: StateFlow<ForgotPasswordUiState> = _uiState.asStateFlow()
 
-    fun dispatch(intent: ForgotPasswordIntent, onPasswordResetSuccess: () -> Unit = {}) {
-        when (intent) {
-            is ForgotPasswordIntent.UpdatePhoneNumber -> updatePhoneNumber(intent.phoneNumber)
-            is ForgotPasswordIntent.UpdateFullName -> updateFullName(intent.fullName)
-            is ForgotPasswordIntent.UpdateNewPassword -> updateNewPassword(intent.password)
-            is ForgotPasswordIntent.UpdateConfirmPassword -> updateConfirmPassword(intent.password)
-            is ForgotPasswordIntent.TogglePasswordVisibility -> togglePasswordVisibility()
-            is ForgotPasswordIntent.ToggleConfirmPasswordVisibility -> toggleConfirmPasswordVisibility()
-            is ForgotPasswordIntent.VerifyIdentity -> verifyIdentity()
-            is ForgotPasswordIntent.UpdatePassword -> updatePassword(onPasswordResetSuccess)
-            is ForgotPasswordIntent.ClearError -> clearError()
-        }
-    }
-
-    private fun updatePhoneNumber(phoneNumber: String) {
+    fun updatePhoneNumber(phoneNumber: String) {
         val formatted = if (phoneNumber.startsWith("+90 ")) phoneNumber else "+90 " + phoneNumber.removePrefix("+90").trim()
-        _uiState.value = _uiState.value.copy(phoneNumber = formatted, errorMessage = "")
+        _uiState.value = _uiState.value.copy(phoneNumber = formatted, errorMessage = "", successMessage = "")
     }
 
-    private fun updateFullName(fullName: String) {
-        _uiState.value = _uiState.value.copy(fullName = fullName, errorMessage = "")
+    fun updateFullName(fullName: String) {
+        _uiState.value = _uiState.value.copy(fullName = fullName, errorMessage = "", successMessage = "")
     }
 
-    private fun updateNewPassword(password: String) {
-        _uiState.value = _uiState.value.copy(newPassword = password, errorMessage = "")
+    fun updateNewPassword(password: String) {
+        _uiState.value = _uiState.value.copy(newPassword = password, errorMessage = "", successMessage = "")
     }
 
-    private fun updateConfirmPassword(password: String) {
-        _uiState.value = _uiState.value.copy(confirmPassword = password, errorMessage = "")
+    fun updateConfirmPassword(password: String) {
+        _uiState.value = _uiState.value.copy(confirmPassword = password, errorMessage = "", successMessage = "")
     }
 
-    private fun togglePasswordVisibility() {
+    fun togglePasswordVisibility() {
         _uiState.value = _uiState.value.copy(passwordVisible = !_uiState.value.passwordVisible)
     }
 
-    private fun toggleConfirmPasswordVisibility() {
+    fun toggleConfirmPasswordVisibility() {
         _uiState.value = _uiState.value.copy(confirmPasswordVisible = !_uiState.value.confirmPasswordVisible)
     }
 
-    private fun clearError() {
+    fun clearError() {
         _uiState.value = _uiState.value.copy(errorMessage = "", successMessage = "")
     }
 
-    private fun verifyIdentity() {
+    fun verifyIdentity() {
         val state = _uiState.value
         if (!isValidPhoneNumber(state.phoneNumber) || state.fullName.trim().isEmpty()) {
             _uiState.value = state.copy(errorMessage = "Lütfen geçerli telefon numarası ve ad soyad girin")
             return
         }
-        scope.launch {
+        viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = "", successMessage = "")
             val verified = try {
                 repository.verifyUserIdentity(state.phoneNumber, state.fullName)
@@ -92,7 +76,7 @@ class ForgotPasswordStore(
         }
     }
 
-    private fun updatePassword(onSuccess: () -> Unit) {
+    fun updatePassword(onSuccess: () -> Unit) {
         val state = _uiState.value
         when {
             !isValidPassword(state.newPassword) -> {
@@ -105,7 +89,7 @@ class ForgotPasswordStore(
                 _uiState.value = state.copy(errorMessage = "Yeni şifre eskisiyle aynı olamaz")
             }
             else -> {
-                scope.launch {
+                viewModelScope.launch {
                     _uiState.value = state.copy(isLoading = true, errorMessage = "", successMessage = "")
                     val updated = try {
                         repository.updateUserPassword(state.phoneNumber, state.newPassword)
@@ -122,6 +106,5 @@ class ForgotPasswordStore(
         }
     }
 }
-
 
 
