@@ -1,4 +1,3 @@
-@file:Deprecated("Moved to com.example.girisekrani.core.util", ReplaceWith("com.example.girisekrani.core.util"))
 package com.example.girisekrani.util
 
 // Şifre validation fonksiyonları
