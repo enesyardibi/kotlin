@@ -25,9 +25,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.girisekrani.core.util.isValidPhoneNumber
 import com.example.girisekrani.feature.auth.login.presentation.LoginViewModel
-import com.example.girisekrani.feature.auth.login.di.LoginViewModelFactory
+import com.example.girisekrani.data.repository.AuthRepository
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -37,7 +39,11 @@ fun LoginScreen(
     onForgotPasswordClick: () -> Unit = {}
 ) {
     val context = LocalContext.current
-    val vm: LoginViewModel = viewModel(factory = LoginViewModelFactory(context))
+    val vm: LoginViewModel = viewModel(
+        factory = viewModelFactory {
+            initializer { LoginViewModel(AuthRepository(context)) }
+        }
+    )
     val uiState by vm.uiState.collectAsState()
 
     Box(

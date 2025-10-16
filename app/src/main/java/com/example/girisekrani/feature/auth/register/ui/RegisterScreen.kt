@@ -22,17 +22,23 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.girisekrani.core.util.getPasswordError
 import com.example.girisekrani.core.util.isValidPassword
 import com.example.girisekrani.core.util.isValidPhoneNumber
-import com.example.girisekrani.feature.auth.register.di.RegisterViewModelFactory
 import com.example.girisekrani.feature.auth.register.presentation.RegisterViewModel
+import com.example.girisekrani.data.repository.AuthRepository
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterScreen(onRegisterSuccess: () -> Unit = {}, onBackToLogin: () -> Unit = {}) {
     val context = LocalContext.current
-    val vm: RegisterViewModel = viewModel(factory = RegisterViewModelFactory(context))
+    val vm: RegisterViewModel = viewModel(
+        factory = viewModelFactory {
+            initializer { RegisterViewModel(AuthRepository(context)) }
+        }
+    )
     val uiState by vm.uiState.collectAsState()
 
     Box(

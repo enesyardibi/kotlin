@@ -23,16 +23,22 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.girisekrani.core.util.isValidPassword
 import com.example.girisekrani.core.util.isValidPhoneNumber
-import com.example.girisekrani.feature.auth.forgot.di.ForgotPasswordViewModelFactory
 import com.example.girisekrani.feature.auth.forgot.presentation.ForgotPasswordViewModel
+import com.example.girisekrani.data.repository.AuthRepository
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ForgotPasswordScreen(onPasswordResetSuccess: () -> Unit = {}, onBackToLogin: () -> Unit = {}) {
     val context = LocalContext.current
-    val vm: ForgotPasswordViewModel = viewModel(factory = ForgotPasswordViewModelFactory(context))
+    val vm: ForgotPasswordViewModel = viewModel(
+        factory = viewModelFactory {
+            initializer { ForgotPasswordViewModel(AuthRepository(context)) }
+        }
+    )
     val uiState by vm.uiState.collectAsState()
 
     Box(
