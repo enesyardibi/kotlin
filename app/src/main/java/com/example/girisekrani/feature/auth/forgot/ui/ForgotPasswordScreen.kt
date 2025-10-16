@@ -1,4 +1,4 @@
-package com.example.girisekrani
+package com.example.girisekrani.feature.auth.forgot.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -25,6 +25,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.girisekrani.core.util.isValidPassword
 import com.example.girisekrani.core.util.isValidPhoneNumber
+import com.example.girisekrani.feature.auth.forgot.di.ForgotPasswordViewModelFactory
+import com.example.girisekrani.feature.auth.forgot.presentation.ForgotPasswordViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -85,7 +87,6 @@ fun ForgotPasswordScreen(onPasswordResetSuccess: () -> Unit = {}, onBackToLogin:
                 shape = RoundedCornerShape(16.dp)
             ) {
                 Column(modifier = Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    
                     if (!uiState.showNewPasswordFields) {
                         // Kimlik Doğrulama Aşaması
                         Text(
@@ -100,12 +101,9 @@ fun ForgotPasswordScreen(onPasswordResetSuccess: () -> Unit = {}, onBackToLogin:
                             maxLines = 3,
                             lineHeight = 20.sp
                         )
-                        
                         OutlinedTextField(
                             value = uiState.phoneNumber,
-                            onValueChange = { 
-                                vm.updatePhoneNumber(it)
-                            },
+                            onValueChange = { vm.updatePhoneNumber(it) },
                             label = { Text("Telefon Numarası") },
                             placeholder = { Text("5XX XXX XX XX") },
                             leadingIcon = { Icon(Icons.Default.Phone, null) },
@@ -114,12 +112,9 @@ fun ForgotPasswordScreen(onPasswordResetSuccess: () -> Unit = {}, onBackToLogin:
                             singleLine = true,
                             maxLines = 1
                         )
-
                         OutlinedTextField(
                             value = uiState.fullName,
-                            onValueChange = { 
-                                vm.updateFullName(it)
-                            },
+                            onValueChange = { vm.updateFullName(it) },
                             label = { Text("Ad Soyad") },
                             placeholder = { Text("Kayıt sırasındaki ad soyad") },
                             leadingIcon = { Icon(Icons.Default.Person, null) },
@@ -128,11 +123,8 @@ fun ForgotPasswordScreen(onPasswordResetSuccess: () -> Unit = {}, onBackToLogin:
                             singleLine = true,
                             maxLines = 1
                         )
-
                         Button(
-                            onClick = {
-                                vm.verifyIdentity()
-                            },
+                            onClick = { vm.verifyIdentity() },
                             modifier = Modifier.fillMaxWidth().height(56.dp),
                             shape = RoundedCornerShape(12.dp),
                             enabled = !uiState.isLoading
@@ -140,14 +132,9 @@ fun ForgotPasswordScreen(onPasswordResetSuccess: () -> Unit = {}, onBackToLogin:
                             if (uiState.isLoading) {
                                 CircularProgressIndicator(color = Color.White, modifier = Modifier.size(20.dp))
                             } else {
-                                Text(
-                                    text = "Kimliği Doğrula",
-                                    fontSize = 16.sp,
-                                    fontWeight = FontWeight.Medium
-                                )
+                                Text(text = "Kimliği Doğrula", fontSize = 16.sp, fontWeight = FontWeight.Medium)
                             }
                         }
-                        
                     } else {
                         // Şifre Değiştirme Aşaması
                         Text(
@@ -159,19 +146,14 @@ fun ForgotPasswordScreen(onPasswordResetSuccess: () -> Unit = {}, onBackToLogin:
                             overflow = TextOverflow.Visible,
                             maxLines = 2
                         )
-                        
                         OutlinedTextField(
                             value = uiState.newPassword,
-                            onValueChange = { 
-                                vm.updateNewPassword(it)
-                            },
+                            onValueChange = { vm.updateNewPassword(it) },
                             label = { Text("Yeni Şifre") },
                             placeholder = { Text("Yeni Şifre") },
                             leadingIcon = { Icon(Icons.Default.Lock, null) },
                             trailingIcon = {
-                                IconButton(onClick = { 
-                                vm.togglePasswordVisibility()
-                                }) {
+                                IconButton(onClick = { vm.togglePasswordVisibility() }) {
                                     Icon(if (uiState.passwordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff, null)
                                 }
                             },
@@ -181,27 +163,20 @@ fun ForgotPasswordScreen(onPasswordResetSuccess: () -> Unit = {}, onBackToLogin:
                             singleLine = true,
                             maxLines = 1
                         )
-                        
-                        // Şifre gereksinimleri uyarısı
                         Text(
                             text = "• En az 6 karakter\n• En az 1 Büyük harf ve küçük harf içermeli",
                             color = Color(0xFF7F8C8D),
                             fontSize = 12.sp,
                             modifier = Modifier.padding(start = 8.dp, top = 4.dp)
                         )
-
                         OutlinedTextField(
                             value = uiState.confirmPassword,
-                            onValueChange = { 
-                                vm.updateConfirmPassword(it)
-                            },
+                            onValueChange = { vm.updateConfirmPassword(it) },
                             label = { Text("Yeni Şifre Tekrar") },
                             placeholder = { Text("Yeni Şifre Tekrar") },
                             leadingIcon = { Icon(Icons.Default.Lock, null) },
                             trailingIcon = {
-                                IconButton(onClick = { 
-                                vm.toggleConfirmPasswordVisibility()
-                                }) {
+                                IconButton(onClick = { vm.toggleConfirmPasswordVisibility() }) {
                                     Icon(if (uiState.confirmPasswordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff, null)
                                 }
                             },
@@ -211,11 +186,8 @@ fun ForgotPasswordScreen(onPasswordResetSuccess: () -> Unit = {}, onBackToLogin:
                             singleLine = true,
                             maxLines = 1
                         )
-
                         Button(
-                            onClick = {
-                                vm.updatePassword(onPasswordResetSuccess)
-                            },
+                            onClick = { vm.updatePassword(onPasswordResetSuccess) },
                             modifier = Modifier.fillMaxWidth().height(56.dp),
                             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50)),
                             shape = RoundedCornerShape(12.dp),
@@ -224,11 +196,7 @@ fun ForgotPasswordScreen(onPasswordResetSuccess: () -> Unit = {}, onBackToLogin:
                             if (uiState.isLoading) {
                                 CircularProgressIndicator(color = Color.White, modifier = Modifier.size(20.dp))
                             } else {
-                                Text(
-                                    text = "Şifreyi Güncelle",
-                                    fontSize = 16.sp,
-                                    fontWeight = FontWeight.Medium
-                                )
+                                Text(text = "Şifreyi Güncelle", fontSize = 16.sp, fontWeight = FontWeight.Medium)
                             }
                         }
                     }
@@ -273,3 +241,5 @@ fun ForgotPasswordScreen(onPasswordResetSuccess: () -> Unit = {}, onBackToLogin:
         }
     }
 }
+
+

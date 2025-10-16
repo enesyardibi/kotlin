@@ -5,6 +5,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.girisekrani.feature.auth.login.ui.LoginScreen
+import com.example.girisekrani.feature.auth.register.ui.RegisterScreen
+import com.example.girisekrani.feature.auth.forgot.ui.ForgotPasswordScreen
 
 sealed class Screen(val route: String) {
     object Splash : Screen("splash")

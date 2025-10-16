@@ -1,4 +1,4 @@
-package com.example.girisekrani
+package com.example.girisekrani.feature.auth.login.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -6,8 +6,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.*
@@ -26,6 +26,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.girisekrani.core.util.isValidPhoneNumber
+import com.example.girisekrani.feature.auth.login.presentation.LoginViewModel
+import com.example.girisekrani.feature.auth.login.di.LoginViewModelFactory
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -74,7 +76,6 @@ fun LoginScreen(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Spacer(modifier = Modifier.height(16.dp))
-                        
                         Text(
                             text = "Hoş Geldiniz",
                             fontSize = 28.sp,
@@ -82,15 +83,14 @@ fun LoginScreen(
                             color = Color(0xFF2C3E50),
                             textAlign = TextAlign.Center
                         )
-                        
                         Spacer(modifier = Modifier.height(8.dp))
                     }
-                    
+
                     Spacer(modifier = Modifier.height(16.dp))
-                    
+
                     OutlinedTextField(
                         value = uiState.phoneNumber,
-                        onValueChange = { 
+                        onValueChange = {
                             vm.updatePhoneNumber(it)
                         },
                         label = { Text("Telefon Numarası") },
@@ -115,7 +115,7 @@ fun LoginScreen(
                         singleLine = true,
                         maxLines = 1
                     )
-                    
+
                     if (!uiState.isPhoneValid && uiState.phoneNumber.length > 4) {
                         Text(
                             text = "Lütfen geçerli bir telefon numarası girin (örn: 5XX XXX XX XX)",
@@ -127,7 +127,7 @@ fun LoginScreen(
 
                     OutlinedTextField(
                         value = uiState.password,
-                        onValueChange = { 
+                        onValueChange = {
                             vm.updatePassword(it)
                         },
                         label = { Text("Şifre") },
@@ -140,25 +140,25 @@ fun LoginScreen(
                         },
                         trailingIcon = {
                             IconButton(
-                                onClick = { 
+                                onClick = {
                                     vm.togglePasswordVisibility()
                                 }
                             ) {
                                 Icon(
-                                    imageVector = if (uiState.passwordVisible) 
-                                        Icons.Default.Visibility 
-                                    else 
+                                    imageVector = if (uiState.passwordVisible)
+                                        Icons.Default.Visibility
+                                    else
                                         Icons.Default.VisibilityOff,
-                                    contentDescription = if (uiState.passwordVisible) 
-                                        "Hide password" 
-                                    else 
+                                    contentDescription = if (uiState.passwordVisible)
+                                        "Hide password"
+                                    else
                                         "Show password"
                                 )
                             }
                         },
-                        visualTransformation = if (uiState.passwordVisible) 
-                            VisualTransformation.None 
-                        else 
+                        visualTransformation = if (uiState.passwordVisible)
+                            VisualTransformation.None
+                        else
                             PasswordVisualTransformation(),
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Password
@@ -237,7 +237,7 @@ fun LoginScreen(
                             color = Color(0xFF667eea),
                             fontSize = 14.sp,
                             fontWeight = FontWeight.Medium,
-                            modifier = Modifier.clickable { 
+                            modifier = Modifier.clickable {
                                 onRegisterClick()
                             }
                         )
@@ -247,3 +247,5 @@ fun LoginScreen(
         }
     }
 }
+
+

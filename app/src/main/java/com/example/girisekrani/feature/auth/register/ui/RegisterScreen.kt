@@ -1,6 +1,4 @@
-package com.example.girisekrani
-
-// Yeniden etkinleştirildi: Uygulama tüm MVI ekranlarıyla çalışıyor.
+package com.example.girisekrani.feature.auth.register.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -27,6 +25,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.girisekrani.core.util.getPasswordError
 import com.example.girisekrani.core.util.isValidPassword
 import com.example.girisekrani.core.util.isValidPhoneNumber
+import com.example.girisekrani.feature.auth.register.di.RegisterViewModelFactory
+import com.example.girisekrani.feature.auth.register.presentation.RegisterViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -204,3 +204,5 @@ fun RegisterScreen(onRegisterSuccess: () -> Unit = {}, onBackToLogin: () -> Unit
         }
     }
 }
+
+

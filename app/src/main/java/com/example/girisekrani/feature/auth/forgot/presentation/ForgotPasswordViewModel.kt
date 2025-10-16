@@ -1,4 +1,4 @@
-package com.example.girisekrani
+package com.example.girisekrani.feature.auth.forgot.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
