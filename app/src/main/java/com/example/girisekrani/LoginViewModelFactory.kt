@@ -3,7 +3,7 @@ package com.example.girisekrani
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.girisekrani.repository.AuthRepository
+import com.example.girisekrani.data.repository.AuthRepository
 
 class LoginViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")

@@ -2,12 +2,12 @@ package com.example.girisekrani
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.girisekrani.model.User
+import com.example.girisekrani.domain.model.User
 import com.example.girisekrani.mvvm.state.RegisterUiState
-import com.example.girisekrani.repository.AuthRepository
-import com.example.girisekrani.util.getPasswordError
-import com.example.girisekrani.util.isValidPassword
-import com.example.girisekrani.util.isValidPhoneNumber
+import com.example.girisekrani.data.repository.AuthRepository
+import com.example.girisekrani.core.util.getPasswordError
+import com.example.girisekrani.core.util.isValidPassword
+import com.example.girisekrani.core.util.isValidPhoneNumber
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

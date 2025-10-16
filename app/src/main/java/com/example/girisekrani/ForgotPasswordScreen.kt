@@ -23,8 +23,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.girisekrani.util.isValidPassword
-import com.example.girisekrani.util.isValidPhoneNumber
+import com.example.girisekrani.core.util.isValidPassword
+import com.example.girisekrani.core.util.isValidPhoneNumber
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

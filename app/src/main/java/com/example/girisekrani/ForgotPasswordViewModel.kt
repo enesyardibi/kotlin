@@ -3,9 +3,9 @@ package com.example.girisekrani
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.girisekrani.mvvm.state.ForgotPasswordUiState
-import com.example.girisekrani.repository.AuthRepository
-import com.example.girisekrani.util.isValidPassword
-import com.example.girisekrani.util.isValidPhoneNumber
+import com.example.girisekrani.data.repository.AuthRepository
+import com.example.girisekrani.core.util.isValidPassword
+import com.example.girisekrani.core.util.isValidPhoneNumber
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
