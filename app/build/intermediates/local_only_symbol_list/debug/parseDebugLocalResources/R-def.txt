@@ -1,0 +1,33 @@
+R_DEF: Internal format may change without notice
+local
+color background
+color black
+color primary
+color purple_200
+color purple_500
+color purple_700
+color secondary
+color splash_background
+color surface
+color teal_200
+color teal_700
+color white
+drawable hesapli_logo
+drawable ic_launcher_background
+drawable ic_launcher_foreground
+mipmap ic_launcher
+mipmap ic_launcher_foreground
+mipmap ic_launcher_round
+string app_name
+string create_account
+string email
+string email_hint
+string forgot_password
+string loading
+string login
+string password
+string password_hint
+string welcome
+style Theme.GirisEkrani
+xml backup_rules
+xml data_extraction_rules

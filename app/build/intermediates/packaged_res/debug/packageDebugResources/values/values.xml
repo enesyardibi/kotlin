@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="background">#FF667eea</color>
+    <color name="black">#FF000000</color>
+    <color name="primary">#FF667eea</color>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="secondary">#FF764ba2</color>
+    <color name="splash_background">#FF667eea</color>
+    <color name="surface">#FF667eea</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="white">#FFFFFFFF</color>
+    <string name="app_name">Giriş Ekranı</string>
+    <string name="create_account">Hesap Oluştur</string>
+    <string name="email">E-posta</string>
+    <string name="email_hint">e-posta@example.com</string>
+    <string name="forgot_password">Şifrenizi mi unuttunuz?</string>
+    <string name="loading">Yükleniyor...</string>
+    <string name="login">Giriş Yap</string>
+    <string name="password">Şifre</string>
+    <string name="password_hint">Şifrenizi girin</string>
+    <string name="welcome">Hoş Geldiniz</string>
+    <style name="Theme.GirisEkrani" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:statusBarColor">@color/primary</item>
+        <item name="android:navigationBarColor">@color/primary</item>
+        <item name="android:windowBackground">@color/splash_background</item>
+        <item name="android:colorBackground">@color/splash_background</item>
+    </style>
+</resources>
