@@ -27,7 +27,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.girisekrani.core.util.isValidPassword
 import com.example.girisekrani.core.util.isValidPhoneNumber
-import com.example.girisekrani.feature.auth.forgot.presentation.ForgotPasswordViewModel
+import com.example.girisekrani.feature.auth.forgot.viewmodel.ForgotPasswordViewModel
 import com.example.girisekrani.data.repository.AuthRepository
 
 @OptIn(ExperimentalMaterial3Api::class)

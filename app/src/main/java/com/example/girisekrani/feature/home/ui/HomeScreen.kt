@@ -1,4 +1,4 @@
-package com.example.girisekrani
+package com.example.girisekrani.feature.home.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -57,7 +57,6 @@ fun HomeScreen() {
                         modifier = Modifier.size(80.dp),
                         tint = Color(0xFF4CAF50)
                     )
-                    
                     Text(
                         text = "Giriş Başarılı!",
                         fontSize = 28.sp,
@@ -65,16 +64,13 @@ fun HomeScreen() {
                         color = Color(0xFF2C3E50),
                         textAlign = TextAlign.Center
                     )
-                    
                     Text(
                         text = "Hoş geldiniz! Uygulamaya başarıyla giriş yaptınız.",
                         fontSize = 16.sp,
                         color = Color(0xFF7F8C8D),
                         textAlign = TextAlign.Center
                     )
-                    
                     Spacer(modifier = Modifier.height(16.dp))
-                    
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
                         verticalAlignment = Alignment.CenterVertically
@@ -96,4 +92,5 @@ fun HomeScreen() {
         }
     }
 }
+
 

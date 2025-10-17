@@ -8,6 +8,8 @@ import androidx.navigation.compose.rememberNavController
 import com.example.girisekrani.feature.auth.login.ui.LoginScreen
 import com.example.girisekrani.feature.auth.register.ui.RegisterScreen
 import com.example.girisekrani.feature.auth.forgot.ui.ForgotPasswordScreen
+import com.example.girisekrani.feature.home.ui.HomeScreen
+import com.example.girisekrani.feature.splash.ui.SplashScreen
 
 sealed class Screen(val route: String) {
     object Splash : Screen("splash")
@@ -77,9 +79,7 @@ fun AppNavigation(
             )
         }
 
-        composable(Screen.Home.route) {
-            HomeScreen()
-        }
+        composable(Screen.Home.route) { HomeScreen() }
     }
 }
 

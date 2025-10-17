@@ -1,8 +1,8 @@
-package com.example.girisekrani.feature.auth.login.presentation
+package com.example.girisekrani.feature.auth.login.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.girisekrani.mvvm.state.LoginUiState
+import com.example.girisekrani.feature.auth.login.viewmodel.state.LoginUiState
 import com.example.girisekrani.data.repository.AuthRepository
 import com.example.girisekrani.core.util.isValidPhoneNumber
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -67,5 +67,6 @@ class LoginViewModel(
         }
     }
 }
+
 
 

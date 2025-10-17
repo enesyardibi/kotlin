@@ -1,4 +1,4 @@
-package com.example.girisekrani.mvvm.state
+package com.example.girisekrani.feature.auth.login.viewmodel.state
 
 data class LoginUiState(
     val phoneNumber: String = "+90 ",
@@ -8,5 +8,6 @@ data class LoginUiState(
     val errorMessage: String = "",
     val isPhoneValid: Boolean = true
 )
+
 
 

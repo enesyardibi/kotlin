@@ -11,6 +11,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.example.girisekrani.ui.theme.GirisEkraniTheme
+import com.example.girisekrani.feature.splash.ui.SplashScreen
+import com.example.girisekrani.AppNavigation
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -1,8 +1,8 @@
-package com.example.girisekrani.feature.auth.forgot.presentation
+package com.example.girisekrani.feature.auth.forgot.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.girisekrani.mvvm.state.ForgotPasswordUiState
+import com.example.girisekrani.feature.auth.forgot.viewmodel.state.ForgotPasswordUiState
 import com.example.girisekrani.data.repository.AuthRepository
 import com.example.girisekrani.core.util.isValidPassword
 import com.example.girisekrani.core.util.isValidPhoneNumber
@@ -106,5 +106,6 @@ class ForgotPasswordViewModel(
         }
     }
 }
+
 
 

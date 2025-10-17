@@ -1,9 +1,9 @@
-package com.example.girisekrani.feature.auth.register.presentation
+package com.example.girisekrani.feature.auth.register.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.girisekrani.domain.model.User
-import com.example.girisekrani.mvvm.state.RegisterUiState
+import com.example.girisekrani.feature.auth.register.viewmodel.state.RegisterUiState
 import com.example.girisekrani.data.repository.AuthRepository
 import com.example.girisekrani.core.util.getPasswordError
 import com.example.girisekrani.core.util.isValidPassword
@@ -90,5 +90,6 @@ class RegisterViewModel(
         }
     }
 }
+
 
 

@@ -1,4 +1,4 @@
-package com.example.girisekrani.mvvm.state
+package com.example.girisekrani.feature.auth.register.viewmodel.state
 
 data class RegisterUiState(
     val fullName: String = "",
@@ -10,5 +10,6 @@ data class RegisterUiState(
     val isLoading: Boolean = false,
     val errorMessage: String = ""
 )
+
 
 
