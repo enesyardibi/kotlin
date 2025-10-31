@@ -4,7 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.girisekrani.domain.model.User
 import com.example.girisekrani.feature.auth.register.viewmodel.state.RegisterUiState
-import com.example.girisekrani.data.repository.AuthRepository
+import com.example.girisekrani.domain.repository.AuthRepository
+import com.example.girisekrani.domain.usecase.IsUserExists
+import com.example.girisekrani.domain.usecase.RegisterUser
 import com.example.girisekrani.core.util.getPasswordError
 import com.example.girisekrani.core.util.isValidPassword
 import com.example.girisekrani.core.util.isValidPhoneNumber
@@ -14,7 +16,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class RegisterViewModel(
-    private val repository: AuthRepository
+    private val registerUser: RegisterUser,
+    private val isUserExists: IsUserExists
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(RegisterUiState())
@@ -64,7 +67,7 @@ class RegisterViewModel(
             state.password != state.confirmPassword -> {
                 _uiState.value = state.copy(errorMessage = "Şifreler eşleşmiyor")
             }
-            repository.isUserExists(state.phoneNumber) -> {
+            isUserExists(state.phoneNumber) -> {
                 _uiState.value = state.copy(errorMessage = "Bu numara ile hesap mevcut")
             }
             else -> {
@@ -72,7 +75,7 @@ class RegisterViewModel(
                     _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = "")
                     val success = try {
                         val user = User(state.fullName.trim(), state.phoneNumber, state.password)
-                        repository.saveUser(user)
+                        registerUser(user)
                     } catch (e: Exception) {
                         false
                     }

@@ -3,7 +3,7 @@ package com.example.girisekrani.feature.auth.login.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.girisekrani.feature.auth.login.viewmodel.state.LoginUiState
-import com.example.girisekrani.data.repository.AuthRepository
+import com.example.girisekrani.domain.usecase.LoginUser
 import com.example.girisekrani.core.util.isValidPhoneNumber
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class LoginViewModel(
-    private val repository: AuthRepository
+    private val loginUser: LoginUser
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(LoginUiState())
@@ -51,7 +51,7 @@ class LoginViewModel(
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = "")
             val success = try {
-                repository.authenticateUser(state.phoneNumber, state.password)
+                loginUser(state.phoneNumber, state.password)
             } catch (e: Exception) {
                 false
             }

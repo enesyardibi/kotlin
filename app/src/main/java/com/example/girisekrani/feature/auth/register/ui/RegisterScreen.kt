@@ -28,7 +28,9 @@ import com.example.girisekrani.core.util.getPasswordError
 import com.example.girisekrani.core.util.isValidPassword
 import com.example.girisekrani.core.util.isValidPhoneNumber
 import com.example.girisekrani.feature.auth.register.viewmodel.RegisterViewModel
-import com.example.girisekrani.data.repository.AuthRepository
+import com.example.girisekrani.data.repository.AuthRepository as AuthRepositoryImpl
+import com.example.girisekrani.domain.usecase.IsUserExists
+import com.example.girisekrani.domain.usecase.RegisterUser
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -36,7 +38,13 @@ fun RegisterScreen(onRegisterSuccess: () -> Unit = {}, onBackToLogin: () -> Unit
     val context = LocalContext.current
     val vm: RegisterViewModel = viewModel(
         factory = viewModelFactory {
-            initializer { RegisterViewModel(AuthRepository(context)) }
+            initializer {
+                val repo = AuthRepositoryImpl(context)
+                RegisterViewModel(
+                    registerUser = RegisterUser(repo),
+                    isUserExists = IsUserExists(repo)
+                )
+            }
         }
     )
     val uiState by vm.uiState.collectAsState()

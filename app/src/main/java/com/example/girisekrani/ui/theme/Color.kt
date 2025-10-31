@@ -13,6 +13,5 @@ val Pink40 = Color(0xFF7D5260)
 // Custom colors for the app
 val Primary = Color(0xFF667eea)
 val Secondary = Color(0xFF764ba2)
-val Background = Color(0xFFFFFBFE)
-val Surface = Color(0xFFFFFBFE)
-
+val Background = Color(0xFFF5F5F5)
+val Surface = Color(0xFFFFFFFF)

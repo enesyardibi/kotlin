@@ -29,7 +29,8 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.girisekrani.core.util.isValidPhoneNumber
 import com.example.girisekrani.feature.auth.login.viewmodel.LoginViewModel
-import com.example.girisekrani.data.repository.AuthRepository
+import com.example.girisekrani.data.repository.AuthRepository as AuthRepositoryImpl
+import com.example.girisekrani.domain.usecase.LoginUser
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -41,7 +42,12 @@ fun LoginScreen(
     val context = LocalContext.current
     val vm: LoginViewModel = viewModel(
         factory = viewModelFactory {
-            initializer { LoginViewModel(AuthRepository(context)) }
+            initializer {
+                val repo = AuthRepositoryImpl(context)
+                LoginViewModel(
+                    loginUser = LoginUser(repo)
+                )
+            }
         }
     )
     val uiState by vm.uiState.collectAsState()
