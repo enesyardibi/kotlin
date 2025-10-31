@@ -3,8 +3,9 @@ package com.example.girisekrani.data.repository
 import android.content.Context
 import android.content.SharedPreferences
 import com.example.girisekrani.domain.model.User
+import com.example.girisekrani.domain.repository.AuthRepository as AuthRepositoryContract
 
-class AuthRepository(private val context: Context) {
+class AuthRepository(private val context: Context) : AuthRepositoryContract {
     private val sharedPrefs: SharedPreferences by lazy {
         context.getSharedPreferences("user_data", Context.MODE_PRIVATE)
     }
@@ -27,7 +28,7 @@ class AuthRepository(private val context: Context) {
         }
     }
 
-    fun saveUser(user: User): Boolean {
+    override fun saveUser(user: User): Boolean {
         return try {
             val normalizedPhone = normalizePhoneNumber(user.phoneNumber)
             sharedPrefs.edit().apply {
@@ -41,20 +42,20 @@ class AuthRepository(private val context: Context) {
         }
     }
 
-    fun isUserExists(phoneNumber: String): Boolean {
+    override fun isUserExists(phoneNumber: String): Boolean {
         val normalizedPhone = normalizePhoneNumber(phoneNumber)
         return sharedPrefs.contains("${normalizedPhone}_password") ||
                sharedPrefs.contains("${phoneNumber}_password")
     }
 
-    fun authenticateUser(phoneNumber: String, password: String): Boolean {
+    override fun authenticateUser(phoneNumber: String, password: String): Boolean {
         val normalizedPhone = normalizePhoneNumber(phoneNumber)
         val savedPassword = sharedPrefs.getString("${normalizedPhone}_password", null)
             ?: sharedPrefs.getString("${phoneNumber}_password", null)
         return savedPassword == password
     }
 
-    fun verifyUserIdentity(phoneNumber: String, fullName: String): Boolean {
+    override fun verifyUserIdentity(phoneNumber: String, fullName: String): Boolean {
         val normalizedPhone = normalizePhoneNumber(phoneNumber)
         val savedName = sharedPrefs.getString("${normalizedPhone}_name", null)
         val fallbackName = if (savedName == null) {
@@ -64,13 +65,13 @@ class AuthRepository(private val context: Context) {
         return nameToCheck?.equals(fullName.trim(), ignoreCase = true) == true
     }
 
-    fun getCurrentPassword(phoneNumber: String): String? {
+    override fun getCurrentPassword(phoneNumber: String): String? {
         val normalizedPhone = normalizePhoneNumber(phoneNumber)
         return sharedPrefs.getString("${normalizedPhone}_password", null)
             ?: sharedPrefs.getString("${phoneNumber}_password", null)
     }
 
-    fun updateUserPassword(phoneNumber: String, newPassword: String): Boolean {
+    override fun updateUserPassword(phoneNumber: String, newPassword: String): Boolean {
         val normalizedPhone = normalizePhoneNumber(phoneNumber)
         val keyToUse = if (sharedPrefs.contains("${normalizedPhone}_password")) {
             "${normalizedPhone}_password"

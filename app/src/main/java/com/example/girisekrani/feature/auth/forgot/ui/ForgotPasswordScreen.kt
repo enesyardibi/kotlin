@@ -28,7 +28,10 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.girisekrani.core.util.isValidPassword
 import com.example.girisekrani.core.util.isValidPhoneNumber
 import com.example.girisekrani.feature.auth.forgot.viewmodel.ForgotPasswordViewModel
-import com.example.girisekrani.data.repository.AuthRepository
+import com.example.girisekrani.data.repository.AuthRepository as AuthRepositoryImpl
+import com.example.girisekrani.domain.usecase.GetCurrentPassword
+import com.example.girisekrani.domain.usecase.UpdateUserPassword
+import com.example.girisekrani.domain.usecase.VerifyUserIdentity
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -36,7 +39,14 @@ fun ForgotPasswordScreen(onPasswordResetSuccess: () -> Unit = {}, onBackToLogin:
     val context = LocalContext.current
     val vm: ForgotPasswordViewModel = viewModel(
         factory = viewModelFactory {
-            initializer { ForgotPasswordViewModel(AuthRepository(context)) }
+            initializer {
+                val repo = AuthRepositoryImpl(context)
+                ForgotPasswordViewModel(
+                    verifyUserIdentity = VerifyUserIdentity(repo),
+                    getCurrentPassword = GetCurrentPassword(repo),
+                    updateUserPassword = UpdateUserPassword(repo)
+                )
+            }
         }
     )
     val uiState by vm.uiState.collectAsState()

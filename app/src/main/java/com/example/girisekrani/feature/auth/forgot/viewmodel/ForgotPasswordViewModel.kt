@@ -3,7 +3,9 @@ package com.example.girisekrani.feature.auth.forgot.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.girisekrani.feature.auth.forgot.viewmodel.state.ForgotPasswordUiState
-import com.example.girisekrani.data.repository.AuthRepository
+import com.example.girisekrani.domain.usecase.GetCurrentPassword
+import com.example.girisekrani.domain.usecase.UpdateUserPassword
+import com.example.girisekrani.domain.usecase.VerifyUserIdentity
 import com.example.girisekrani.core.util.isValidPassword
 import com.example.girisekrani.core.util.isValidPhoneNumber
 import kotlinx.coroutines.delay
@@ -13,7 +15,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class ForgotPasswordViewModel(
-    private val repository: AuthRepository
+    private val verifyUserIdentity: VerifyUserIdentity,
+    private val getCurrentPassword: GetCurrentPassword,
+    private val updateUserPassword: UpdateUserPassword
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ForgotPasswordUiState())
@@ -57,7 +61,7 @@ class ForgotPasswordViewModel(
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = "", successMessage = "")
             val verified = try {
-                repository.verifyUserIdentity(state.phoneNumber, state.fullName)
+                verifyUserIdentity(state.phoneNumber, state.fullName)
             } catch (e: Exception) {
                 false
             }
@@ -85,14 +89,14 @@ class ForgotPasswordViewModel(
             state.newPassword != state.confirmPassword -> {
                 _uiState.value = state.copy(errorMessage = "Şifreler eşleşmiyor")
             }
-            repository.getCurrentPassword(state.phoneNumber) == state.newPassword -> {
+            getCurrentPassword(state.phoneNumber) == state.newPassword -> {
                 _uiState.value = state.copy(errorMessage = "Yeni şifre eskisiyle aynı olamaz")
             }
             else -> {
                 viewModelScope.launch {
                     _uiState.value = state.copy(isLoading = true, errorMessage = "", successMessage = "")
                     val updated = try {
-                        repository.updateUserPassword(state.phoneNumber, state.newPassword)
+                        updateUserPassword(state.phoneNumber, state.newPassword)
                     } catch (e: Exception) { false }
                     if (updated) {
                         _uiState.value = state.copy(isLoading = false, successMessage = "Şifre güncellendi!")
